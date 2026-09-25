@@ -106,12 +106,20 @@ def run_gui_server():
         config["fixed"] = not config["fixed"]
         save_config()
 
+    def on_show_log(icon, item):
+        try:
+            if os.path.exists(LOG_FILE):
+                os.startfile(LOG_FILE)
+        except Exception as e:
+            pass
+
     def on_quit(icon, item):
         icon.stop()
         root.after(0, root.destroy)
 
     menu = pystray.Menu(
         pystray.MenuItem(lambda text: "🔒 Position fixiert" if config.get("fixed") else "🔓 Position verschiebbar", on_toggle_fix),
+        pystray.MenuItem("📜 Log anzeigen", on_show_log),
         pystray.MenuItem("❌ Beenden", on_quit)
     )
     
