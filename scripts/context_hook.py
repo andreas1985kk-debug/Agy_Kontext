@@ -163,12 +163,20 @@ def main():
         return
 
     log_debug("Hook gestartet!")
+    import re
     try:
-        input_data = json.load(sys.stdin)
-    except Exception:
-        input_data = {}
+        raw_data = sys.stdin.read()
+        log_debug(f"Raw Input: {raw_data}")
+        # Sicheres Extrahieren des Pfads ohne JSON-Parser (verhindert Crash bei kaputten Windows-Pfaden)
+        match = re.search(r'"transcriptPath"\s*:\s*"(.*?)"', raw_data)
+        if match:
+            transcript_path = match.group(1).replace('\\\\', '\\')
+        else:
+            transcript_path = ""
+    except Exception as e:
+        log_debug(f"Fehler beim Lesen: {e}")
+        transcript_path = ""
 
-    transcript_path = input_data.get("transcriptPath", "")
     if not transcript_path or not os.path.exists(transcript_path):
         status_icon = "⚪"
         token_k = "0k"
