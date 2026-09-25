@@ -10,7 +10,18 @@ STATE_FILE = r"C:\AI_Engineering\.agents\plugins\context_watchdog\state.json"
 CONFIG_FILE = r"C:\AI_Engineering\.agents\plugins\context_watchdog\config.json"
 GUI_PORT = 49200
 
+def is_logging_enabled():
+    try:
+        if os.path.exists(CONFIG_FILE):
+            with open(CONFIG_FILE, "r") as f:
+                return json.load(f).get("logging_enabled", False)
+    except:
+        pass
+    return False
+
 def log_debug(msg):
+    if not is_logging_enabled():
+        return
     try:
         os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
         with open(LOG_FILE, "a", encoding="utf-8") as f:
@@ -30,8 +41,8 @@ def run_gui_server():
     import pystray
     from PIL import Image, ImageDraw
 
-    # Lade Position und Fixierungs-Status
-    config = {"x": None, "y": None, "fixed": False}
+    # Lade Position, Fixierungs-Status und Logging-Status
+    config = {"x": None, "y": None, "fixed": False, "logging_enabled": False}
     try:
         if os.path.exists(CONFIG_FILE):
             with open(CONFIG_FILE, "r") as f:
@@ -106,6 +117,10 @@ def run_gui_server():
         config["fixed"] = not config["fixed"]
         save_config()
 
+    def on_toggle_log_state(icon, item):
+        config["logging_enabled"] = not config.get("logging_enabled", False)
+        save_config()
+
     def on_show_log(icon, item):
         try:
             if os.path.exists(LOG_FILE):
@@ -119,6 +134,7 @@ def run_gui_server():
 
     menu = pystray.Menu(
         pystray.MenuItem(lambda text: "🔒 Position fixiert" if config.get("fixed") else "🔓 Position verschiebbar", on_toggle_fix),
+        pystray.MenuItem(lambda text: "✅ Logging aktiv" if config.get("logging_enabled") else "❌ Logging inaktiv", on_toggle_log_state),
         pystray.MenuItem("📜 Log anzeigen", on_show_log),
         pystray.MenuItem("❌ Beenden", on_quit)
     )
