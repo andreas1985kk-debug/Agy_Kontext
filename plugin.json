@@ -1,0 +1,5 @@
+{
+  "name": "context-watchdog-plugin",
+  "description": "Zero-Token Chat-Context Watchdog via Ephemeral Messages",
+  "hooks": ["hooks.json"]
+}

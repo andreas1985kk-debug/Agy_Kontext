@@ -1,0 +1,11 @@
+{
+  "hooks": [
+    {
+      "event": "PostInvocation",
+      "handler": {
+        "type": "command",
+        "command": "python ./scripts/context_hook.py"
+      }
+    }
+  ]
+}
