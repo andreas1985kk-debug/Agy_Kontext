@@ -21,8 +21,16 @@ def main():
 
     transcript_path = input_data.get("transcriptPath", "")
     if not transcript_path or not os.path.exists(transcript_path):
-        log_debug(f"Transcript path not found: {transcript_path}")
-        print(json.dumps({}))
+        # No transcript available – still provide a status message
+        log_debug(f"Transcript path not found or missing: {transcript_path}")
+        status = "⚪ NO TRANSCRIPT"
+        token_k = "0k"
+        max_k = "1000k"
+        percent = 0
+        message = f"**Kontext-Wächter:** {status} | {token_k} / {max_k} Tokens ({percent}%) genutzt."
+        output = {"injectSteps": [{"ephemeralMessage": message}]}
+        print(json.dumps(output))
+        log_debug("Fertig ohne Transcript.")
         return
 
     log_debug(f"Transcript path gefunden: {transcript_path}")
