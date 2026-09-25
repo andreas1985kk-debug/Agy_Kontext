@@ -1,6 +1,14 @@
 # Agy_Kontext – Zero‑Token Context‑Watchdog Plugin
 
-Dieses Plugin kombiniert einen Antigravity-Hook mit einem permanenten Desktop-Widget (System Tray), um nach jedem KI-Antwort-Turn den aktuellen Token-Verbrauch des Chats live, minimalistisch und **vollständig tokenfrei** auf Ihrem Bildschirm anzuzeigen.
+Dieses Plugin kombiniert einen Hook mit einem permanenten Desktop-Widget (System Tray), um nach jedem KI-Antwort-Turn den aktuellen Token-Verbrauch des Chats live, minimalistisch und **vollständig tokenfrei** auf Ihrem Bildschirm anzuzeigen. 
+
+Ursprünglich für **Antigravity 2.0** entwickelt, funktioniert es **out-of-the-box** aber auch mit der originalen Antigravity-CLI, Claude Code und grundsätzlich jeder KI-Entwicklungsumgebung oder IDE, die es erlaubt, externe Shell-Kommandos via Lifecycle-Hooks (z.B. `PostInvocation`, `Stop` o.ä.) auszuführen.
+
+## Kompatibilität & Voraussetzungen
+
+*   **Antigravity 2.0 / Antigravity CLI:** Nutzt standardmäßig das `PostInvocation` Event über die `hooks.json`.
+*   **Andere IDEs / Agenten:** Das Python-Skript muss lediglich nach jeder KI-Antwort aufgerufen werden. Das Skript erwartet im Standard-Input (`stdin`) lediglich einen JSON-String, der den Dateipfad zum Chatverlauf enthält: `{"transcriptPath": "Pfad/zur/Logdatei.jsonl"}`.
+*   **Windows 10 / 11:** Das transparente GUI-Overlay ist nativ für die Windows-Taskleiste optimiert.
 
 ## Installation & Einrichtung
 
